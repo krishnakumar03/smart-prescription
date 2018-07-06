@@ -1,0 +1,32 @@
+{
+  "name": "smart-prescription",
+  "version": "1.0.0",
+  "description": "An open source blockchain project for virtual aadhar based smart prescription and medicine or drug delivery",
+  "main": "index.js",
+  "scripts": {
+    "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/product-auction.bna",
+    "test": "nyc mocha -t 0 test/*.js"
+  },
+  "keywords": [
+    "nodejs",
+    "hyperledger",
+    "medicines"
+  ],
+  "author": "Ramsundhar Madhavan, Sainath Reddy, Krishnakumar Srinivasan",
+  "license": "SEE LICENSE IN THE LICENSE.TXT",
+  "devDependencies": {
+    "browserfs": "latest",
+    "chai": "latest",
+    "chai-as-promised": "latest",
+    "composer-cli": "^0.19.5",
+    "composer-common": "^0.19.5",
+    "composer-admin": "^0.19.5",
+    "composer-client": "^0.19.5",
+    "composer-connector-embedded": "^0.19.5",
+    "eslint": "latest",
+    "istanbul": "latest",
+    "mkdirp": "latest",
+    "mocha": "latest",
+    "nyc": "latest"
+  }
+}
