@@ -1,0 +1,83 @@
+/**
+/**
+ * Defines a data model for a prescription redeem
+ */
+namespace com.authmeds.prescription.redeem
+
+enum ListingState {
+  o FOR_SALE
+  o RESERVE_NOT_MET
+  o SOLD
+}
+
+asset Prescription identified by prescriptionId {
+  o String prescriptionId
+  o String description
+  --> User owner
+}
+
+asset PrescriptionListing identified by listingId {
+  o String listingId
+  o Double reservePrice
+  o ListingState state
+  o Offer[] offers optional
+  --> Prescription prescription
+}
+
+abstract participant User identified by email {
+  o String email
+  o Double balance
+  o Prescription[] prescriptions
+}
+
+/**
+ * A Doctor participant
+ */
+participant Doctor extends User {
+  o String firstName
+  o String lastName
+  o String organisation
+}
+
+/**
+ * A Pharmacist participant
+ */
+participant Pharmacist extends User {
+  o String firstName
+  o String lastName
+  o String organisation
+}
+
+/**
+ * A Patient participant
+ */
+participant Patient extends User {
+  o String firstName
+  o String lastName
+}
+
+/**
+ * Transactions performed on network
+ */
+
+transaction Offer {
+  o Double buyPrice
+  --> PrescriptionListing listing
+  --> User member
+}
+
+transaction CloseCounter {
+  --> PrescriptionListing listing
+}
+
+transaction StartCounter {
+  o String listingId
+  o Double reservePrice
+  --> Prescription prescription
+}
+
+transaction AddPrescription {
+  o String prescriptionId
+  o String description
+  --> Pharmacist owner
+}
