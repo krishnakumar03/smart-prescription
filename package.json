@@ -4,7 +4,7 @@
   "description": "An open source blockchain project for virtual aadhar based smart prescription and medicine or drug delivery",
   "main": "index.js",
   "scripts": {
-    "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/product-auction.bna",
+    "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/smart-prescription.bna",
     "test": "nyc mocha -t 0 test/*.js"
   },
   "keywords": [
