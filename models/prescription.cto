@@ -79,5 +79,5 @@ transaction StartCounter {
 transaction AddPrescription {
   o String prescriptionId
   o String description
-  --> Pharmacist owner
+  --> Doctor owner
 }

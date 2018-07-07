@@ -15,7 +15,7 @@
      description: "Allow all participants read access to all resources"
      participant: "com.authmeds.prescription.redeem.Pharmacist"
      operation: READ
-     resource: "com.authmeds.prescription.redeem.Member"
+     resource: "com.authmeds.prescription.redeem.Patient"
      action: ALLOW
  }
 
@@ -29,8 +29,8 @@
  }
 
 rule PrescriptionView {
-    description: "Allow Users all access to their prescriptions"
-    participant: "com.authmeds.prescription.redeem.User"
+    description: "Allow Patients all access to their prescriptions"
+    participant: "com.authmeds.prescription.redeem.Patient"
     operation: READ
     resource: "com.authmeds.prescription.redeem.Prescription"
     action: ALLOW
@@ -75,7 +75,7 @@ rule MakeOffer{
       description: "Allow members to buy for the prescription"
       participant(m): "com.authmeds.prescription.redeem.User"
       operation: CREATE
-      resource(v): "com.authmeds.prescription.redeem.Offer"
+      resource(v): "com.authmeds.prescription.redeem.StartCounter####"
       condition: (v.member.getIdentifier() == m.getIdentifier())
       action: ALLOW
 }
@@ -88,30 +88,30 @@ rule MembersCanUpdatePrescriptionListing {
     action: ALLOW
 }
 
-rule StartOfferProcessTransaction {
+rule StartCounterProcessTransaction {
      description: "Allow owner of prescription to start the buying"
      participant(m): "com.authmeds.prescription.redeem.User"
      operation: CREATE
-     resource(v): "com.authmeds.prescription.redeem.StartOffer"
+     resource(v): "com.authmeds.prescription.redeem.StartCounter"
      condition: (v.prescription.owner.getIdentifier() == m.getIdentifier())
      action: ALLOW
  }
 
- rule CloseOfferProcessTransaction {
+ rule CloseCounterProcessTransaction {
      description: "Allow owner of prescription to close the buying"
      participant(m): "com.authmeds.prescription.redeem.User"
      operation: CREATE
-     resource(v): "com.authmeds.prescription.redeem.CloseOffer"
+     resource(v): "com.authmeds.prescription.redeem.CloseCounter"
      condition: (v.listing.prescription.owner.getIdentifier() == m.getIdentifier())
      action: ALLOW
  }
 
-rule CloseOfferProcessTransactionUpdate {
+rule CloseCounterProcessTransactionUpdate {
       description: "Allow members to buy for the prescription"
       participant(m): "com.authmeds.prescription.redeem.User"
       operation: UPDATE
       resource(v): "com.authmeds.prescription.redeem.User"
-      transaction(tx): "com.authmeds.prescription.redeem.CloseOffer"
+      transaction(tx): "com.authmeds.prescription.redeem.CloseCounter"
       condition: (tx.listing.prescription.owner.getIdentifier() == m.getIdentifier())
       action: ALLOW
 }
