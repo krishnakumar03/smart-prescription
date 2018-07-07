@@ -63,7 +63,7 @@ rule PrescriptionListingOwner {
 }
 
 rule AddPrescription{
-    description: "Allow Sellers to add new prescription"
+    description: "Allow Doctors to add new prescription"
     participant(m): "com.authmeds.prescription.redeem.Doctor"
     operation: CREATE
     resource(v): "com.authmeds.prescription.redeem.AddPrescription"
@@ -75,7 +75,7 @@ rule MakeOffer{
       description: "Allow members to buy for the prescription"
       participant(m): "com.authmeds.prescription.redeem.User"
       operation: CREATE
-      resource(v): "com.authmeds.prescription.redeem.StartCounter####"
+      resource(v): "com.authmeds.prescription.redeem.Offer"
       condition: (v.member.getIdentifier() == m.getIdentifier())
       action: ALLOW
 }
@@ -139,3 +139,4 @@ rule NetworkAdminSystem {
     resource: "org.hyperledger.composer.system.**"
     action: ALLOW
 }
+
