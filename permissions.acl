@@ -1,0 +1,141 @@
+/**
+ * Access Control List for the buying network.
+ */
+
+ rule MembersCanViewALLData {
+     description: "Allow all participants read access to all resources"
+     participant(m): "com.authmeds.prescription.redeem.User"
+     operation: READ
+     resource(v): "com.authmeds.prescription.redeem.*"
+     condition: (v.getIdentifier() == m.getIdentifier())
+     action: ALLOW
+ }
+
+ rule PharmacistCanViewMemberData {
+     description: "Allow all participants read access to all resources"
+     participant: "com.authmeds.prescription.redeem.Pharmacist"
+     operation: READ
+     resource: "com.authmeds.prescription.redeem.Member"
+     action: ALLOW
+ }
+
+ rule PharmacistCanUpdateData {
+     description: "Allow all seller access to all resources"
+     participant(m): "com.authmeds.prescription.redeem.Pharmacist"
+     operation: ALL
+     resource(v): "com.authmeds.prescription.redeem.Pharmacist"
+     condition: (v.getIdentifier() == m.getIdentifier())
+     action: ALLOW
+ }
+
+rule PrescriptionView {
+    description: "Allow Users all access to their prescriptions"
+    participant: "com.authmeds.prescription.redeem.User"
+    operation: READ
+    resource: "com.authmeds.prescription.redeem.Prescription"
+    action: ALLOW
+}
+
+rule PrescriptionAccess {
+    description: "Allow Users all access to their prescriptions"
+    participant(m): "com.authmeds.prescription.redeem.User"
+    operation: ALL
+    resource(v): "com.authmeds.prescription.redeem.Prescription"
+    condition: (v.owner.getIdentifier() == m.getIdentifier())
+    action: ALLOW
+}
+
+rule PrescriptionListingView {
+    description: "Allow the owner of a prescription total access to their listing"
+    participant: "com.authmeds.prescription.redeem.User"
+    operation: READ
+    resource: "com.authmeds.prescription.redeem.PrescriptionListing"
+    action: ALLOW
+}
+
+rule PrescriptionListingOwner {
+    description: "Allow the pharmacist of a prescription total access to their listing"
+    participant(m): "com.authmeds.prescription.redeem.Pharmacist"
+    operation: ALL
+    resource(v): "com.authmeds.prescription.redeem.PrescriptionListing"
+    condition: (v.prescription.owner.getIdentifier() == m.getIdentifier())
+    action: ALLOW
+}
+
+rule AddPrescription{
+    description: "Allow Sellers to add new prescription"
+    participant(m): "com.authmeds.prescription.redeem.Doctor"
+    operation: CREATE
+    resource(v): "com.authmeds.prescription.redeem.AddPrescription"
+    condition: (v.owner.getIdentifier() == m.getIdentifier())
+    action: ALLOW
+}
+
+rule MakeOffer{
+      description: "Allow members to buy for the prescription"
+      participant(m): "com.authmeds.prescription.redeem.User"
+      operation: CREATE
+      resource(v): "com.authmeds.prescription.redeem.Offer"
+      condition: (v.member.getIdentifier() == m.getIdentifier())
+      action: ALLOW
+}
+
+rule MembersCanUpdatePrescriptionListing {
+    description: "Allow the members to update their buy for the listing"
+    participant: "com.authmeds.prescription.redeem.User"
+    operation: UPDATE
+    resource: "com.authmeds.prescription.redeem.PrescriptionListing"
+    action: ALLOW
+}
+
+rule StartOfferProcessTransaction {
+     description: "Allow owner of prescription to start the buying"
+     participant(m): "com.authmeds.prescription.redeem.User"
+     operation: CREATE
+     resource(v): "com.authmeds.prescription.redeem.StartOffer"
+     condition: (v.prescription.owner.getIdentifier() == m.getIdentifier())
+     action: ALLOW
+ }
+
+ rule CloseOfferProcessTransaction {
+     description: "Allow owner of prescription to close the buying"
+     participant(m): "com.authmeds.prescription.redeem.User"
+     operation: CREATE
+     resource(v): "com.authmeds.prescription.redeem.CloseOffer"
+     condition: (v.listing.prescription.owner.getIdentifier() == m.getIdentifier())
+     action: ALLOW
+ }
+
+rule CloseOfferProcessTransactionUpdate {
+      description: "Allow members to buy for the prescription"
+      participant(m): "com.authmeds.prescription.redeem.User"
+      operation: UPDATE
+      resource(v): "com.authmeds.prescription.redeem.User"
+      transaction(tx): "com.authmeds.prescription.redeem.CloseOffer"
+      condition: (tx.listing.prescription.owner.getIdentifier() == m.getIdentifier())
+      action: ALLOW
+}
+
+rule SystemACL {
+  description:  "System ACL to permit all access"
+  participant: "org.hyperledger.composer.system.Participant"
+  operation: ALL
+  resource: "org.hyperledger.composer.system.**"
+  action: ALLOW
+}
+
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "**"
+    action: ALLOW
+}
+
+rule NetworkAdminSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
